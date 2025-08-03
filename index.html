@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raksha Bandhan Wishes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --text-dark: #333;
+            --green-gradient-start: #25D366;
+            --green-gradient-end: #128C7E;
+        }
+
+        /* --- BACKGROUND & LAYOUT --- */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #a3a8b0;
+            background-image: linear-gradient(to top, #d2d8e0, #a3a8b0);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* --- 9:16 PHONE FRAME --- */
+        #video-animation-frame {
+            position: relative;
+            z-index: 3;
+            height: 95vh;
+            max-height: 850px;
+            aspect-ratio: 9 / 16;
+            border-radius: 40px;
+            border: 8px solid #2c2c2c;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            overflow: hidden;
+            display: flex;
+            background: url('background.gif') no-repeat center center/cover; 
+        }
+
+        #frame-content {
+            width: 100%; height: 100%; overflow-y: auto;
+            padding: 20px; box-sizing: border-box;
+            background: rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        #frame-content::-webkit-scrollbar { display: none; }
+
+        .container { 
+            width: 100%; 
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; 
+            align-items: center;
+            text-align: center;
+            padding-top: 50vh; 
+         }
+        
+        /* --- FIREWORK ANIMATION --- */
+        #fireworks-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+        }
+
+        .firework {
+            position: absolute;
+            bottom: 0;
+            left: var(--x-pos, 50%);
+            width: 3px;
+            height: 3px;
+            background: gold;
+            border-radius: 50%;
+            opacity: 0;
+            animation: shoot var(--duration, 3s) ease-in infinite;
+            animation-delay: var(--delay, 0s);
+        }
+
+        @keyframes shoot {
+            0% { transform: translateY(0); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(-80vh); opacity: 0; }
+        }
+
+        .firework::before {
+            content: ''; position: absolute; left: 50%; top: 100%;
+            width: 100%; height: 20px; 
+            background: linear-gradient(to top, gold, transparent);
+            transform: translateX(-50%);
+        }
+
+        .firework .explosion {
+            position: absolute; left: 0; top: 0;
+            width: 3px; height: 3px; opacity: 0;
+            animation: explode 1s ease-out infinite;
+            animation-delay: calc(var(--duration, 3s) + var(--delay, 0s) - 0.2s);
+        }
+
+        @keyframes explode {
+            0% { opacity: 1; transform: scale(0.5); }
+            100% { opacity: 0; transform: scale(2.5); }
+        }
+
+        .explosion .particle {
+            position: absolute; width: 4px; height: 4px;
+            background: var(--color, #FFF); border-radius: 50%;
+            top: 0; left: 0; opacity: 0;
+            animation: move-particle 1s ease-out infinite;
+            animation-delay: calc(var(--duration, 3s) + var(--delay, 0s) - 0.2s);
+        }
+        
+        @keyframes move-particle {
+            0% { transform: rotate(var(--angle)) translateY(0); opacity: 1; }
+            100% { transform: rotate(var(--angle)) translateY(100px); opacity: 0; }
+        }
+
+        /* --- UI Elements Styling --- */
+        #userInputSection { width: 100%; }
+        .input-group { margin-bottom: 20px; }
+        .input-field {
+            width: 100%; padding: 16px; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50px; background: rgba(255, 255, 255, 0.7);
+            color: var(--text-dark); font-size: 1rem; transition: all 0.3s ease;
+        }
+        .input-field::placeholder { color: #555; font-weight: bold; }
+        .input-field:focus {
+            outline: none; border-color: var(--green-gradient-start);
+            box-shadow: 0 0 10px rgba(37, 211, 102, 0.5);
+        }
+        .action-button {
+            padding: 16px 35px; border: none; border-radius: 50px;
+            font-size: 1.1rem; font-weight: 600; cursor: pointer; color: #fff;
+            background: linear-gradient(45deg, #ff3333, #ff6b6b);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease-in-out;
+        }
+        .action-button:hover {
+            transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+        #createWishBtn {
+            background: linear-gradient(45deg, var(--green-gradient-start), var(--green-gradient-end));
+        }
+        #greetingCard {
+            display: none; margin-top: 30px; padding: 25px; border-radius: 20px;
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 8px 32px 0 rgba(0,0,0,0.1);
+            color: var(--text-dark);
+        }
+        #greetingMessage { font-size: clamp(1rem, 4vw, 1.2rem); line-height: 1.7; font-weight: bold; }
+        #shareBtn {
+            display: none;
+            margin-top: 25px; 
+        }
+
+        /* (NEW) Ad Container Style */
+        #ad-container-bottom {
+            position: absolute;
+            bottom: 10px; /* नीचे से थोड़ी जगह */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 468px; /* आपके अनुरोध के अनुसार */
+            height: 60px; /* आपके अनुरोध के अनुसार */
+            z-index: 100; /* ताकि यह सबसे ऊपर दिखे */
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="video-animation-frame">
+        <div id="frame-content">
+            <div id="fireworks-container"></div>
+            <div class="container">
+
+                <div id="userInputSection">
+                    <div class="input-group">
+                        <input type="text" id="senderName" class="input-field" placeholder="अपना नाम लिखें" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="siblingName" class="input-field" placeholder="भाई/बहन का नाम (वैकल्पिक)">
+                    </div>
+                    <button id="createWishBtn" class="action-button">शुभकामनाएं भेजें</button>
+                </div>
+
+                <div id="greetingCard">
+                    <p id="greetingMessage"></p>
+                </div>
+
+                <button id="shareBtn" class="action-button">दोस्त को भेजें</button>
+
+            </div>
+        </div>
+
+        <!-- (NEW) ADVERTISEMENT SCRIPT PLACED HERE AT THE BOTTOM OF THE FRAME -->
+        <div id="ad-container-bottom">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '6e22f960c9a23b31b53de02622898800',
+                    'format' : 'iframe',
+                    'height' : 60,
+                    'width' : 468,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/6e22f960c9a23b31b53de02622898800/invoke.js"></script>
+        </div>
+    </div>
+
+    <audio id="bgMusic" src="song.mp3" loop></audio>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const createWishBtn = document.getElementById('createWishBtn');
+            const shareBtn = document.getElementById('shareBtn');
+            const greetingCard = document.getElementById('greetingCard');
+            const greetingMessage = document.getElementById('greetingMessage');
+            const senderNameInput = document.getElementById('senderName');
+            const siblingNameInput = document.getElementById('siblingName');
+            const userInputSection = document.getElementById('userInputSection');
+            const bgMusic = document.getElementById('bgMusic');
+            let hasInteracted = false;
+            
+            const fireworksContainer = document.getElementById('fireworks-container');
+            const numFireworks = 3;
+            const colors = ['#FFD700', '#FF4500', '#ADFF2F', '#FF69B4', '#00FFFF', '#FFF'];
+
+            for (let i = 0; i < numFireworks; i++) {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                const duration = 2.5 + Math.random() * 2;
+                
+                firework.style.setProperty('--x-pos', (15 + Math.random() * 70) + '%');
+                firework.style.setProperty('--duration', duration + 's');
+                firework.style.setProperty('--delay', (Math.random() * duration) + 's');
+                
+                const explosion = document.createElement('div');
+                explosion.className = 'explosion';
+                
+                const numParticles = 25; 
+                for(let j = 0; j < numParticles; j++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.setProperty('--angle', (360 / numParticles * j) + 'deg');
+                    particle.style.setProperty('--color', colors[Math.floor(Math.random() * colors.length)]);
+                    particle.style.setProperty('--duration', duration + 's');
+                    particle.style.setProperty('--delay', (Math.random() * duration) + 's');
+                    explosion.appendChild(particle);
+                }
+                
+                firework.appendChild(explosion);
+                fireworksContainer.appendChild(firework);
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const fromName = urlParams.get('from');
+            const toName = urlParams.get('to');
+
+            if (fromName) {
+                const sender = decodeURIComponent(fromName.replace(/\+/g, ' '));
+                const sibling = toName ? decodeURIComponent(toName.replace(/\+/g, ' ')) : null;
+                let message;
+                
+                if (sibling) {
+                    message = `यह संदेश ${sender} की तरफ से ${sibling} के लिए है:\n\nतुम्हें ढेर सारा प्यार और हमेशा रक्षा करने का वादा। रक्षा बंधन की बहुत-बहुत शुभकामनाएं!`;
+                } else {
+                    message = `${sender} की तरफ से आपको रक्षा बंधन की बहुत-बहुत शुभकामनाएं!`;
+                }
+                greetingMessage.innerText = message;
+                greetingCard.style.display = 'block';
+                userInputSection.style.display = 'none';
+                shareBtn.style.display = 'none';
+            }
+
+            const playMusic = () => {
+                if(bgMusic.paused) {
+                    bgMusic.play().catch(error => console.log("Autoplay was prevented:", error));
+                }
+            };
+            const startMusicOnInteraction = () => {
+                if(hasInteracted) return;
+                hasInteracted = true;
+                playMusic();
+                document.body.removeEventListener('click', startMusicOnInteraction);
+                document.body.removeEventListener('touchstart', startMusicOnInteraction);
+            };
+            document.body.addEventListener('click', startMusicOnInteraction);
+            document.body.addEventListener('touchstart', startMusicOnInteraction);
+            
+            createWishBtn.addEventListener('click', () => {
+                const senderName = senderNameInput.value.trim();
+                if (!senderName) { alert('कृपया अपना नाम लिखें!'); return; }
+                const siblingName = siblingNameInput.value.trim();
+                let message;
+                if(siblingName){
+                    message = `प्यारे ${siblingName},\n${senderName} की तरफ से रक्षा बंधन की ढेर सारी शुभकामनाएं! यह त्यौहार हमारे प्यार के बंधन को और भी मजबूत करे।`;
+                } else {
+                    message = `${senderName} की तरफ से आपको रक्षा बंधन की बहुत-बहुत शुभकामनाएं!`;
+                }
+                greetingMessage.innerText = message;
+                greetingCard.style.display = 'block';
+                shareBtn.style.display = 'inline-block';
+
+                setTimeout(() => {
+                    shareBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
+            });
+
+            shareBtn.addEventListener('click', async () => {
+                const senderName = senderNameInput.value.trim();
+                const siblingName = siblingNameInput.value.trim();
+                if (!senderName) {
+                    alert('शेयर करने के लिए कृपया अपना नाम लिखें!');
+                    return;
+                }
+
+                const baseUrl = window.location.origin + window.location.pathname;
+                let shareUrl = `${baseUrl}?from=${encodeURIComponent(senderName)}`;
+                if (siblingName) { shareUrl += `&to=${encodeURIComponent(siblingName)}`; }
+                const shareText = `💖 ${senderName} ने आपके लिए रक्षा बंधन का एक खास संदेश भेजा है! देखने के लिए लिंक पर क्लिक करें:`;
+
+                const shareData = {
+                    title: 'रक्षा बंधन की शुभकामनाएं!',
+                    text: shareText,
+                    url: shareUrl,
+                };
+
+                if (navigator.share) {
+                    try {
+                        await navigator.share(shareData);
+                    } catch (err) {
+                        console.error('Share failed:', err.message);
+                    }
+                } else {
+                    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + "\n\n" + shareUrl)}`;
+                    window.open(whatsappUrl, '_blank');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
